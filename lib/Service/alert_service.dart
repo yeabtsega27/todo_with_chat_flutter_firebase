@@ -43,7 +43,7 @@ class AlertService {
             Icon(icon, color: Colors.white),
             const SizedBox(width: 8),
             Expanded(
-                child: Text(message, style: TextStyle(color: Colors.white))),
+                child: Text(message, style: const TextStyle(color: Colors.white))),
           ],
         ),
         duration: const Duration(seconds: 2),

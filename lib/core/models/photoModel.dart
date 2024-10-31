@@ -19,11 +19,12 @@ class Photo {
   }
 
   // Create Photo from JSON
-  factory Photo.fromJson(Map<String, dynamic> json) {
+  factory Photo.fromJson(Map<String, dynamic>? json) {
     return Photo(
-      photoURL: json['photoURL'],
-      uploadTime: DateTime.parse(json['uploadTime']),
-      path: json['path'] ?? "",
+      photoURL: json?['photoURL'] ?? "",
+      uploadTime:
+          DateTime.parse(json?['uploadTime'] ?? DateTime.now().toString()),
+      path: json?['path'] ?? "",
     );
   }
 }

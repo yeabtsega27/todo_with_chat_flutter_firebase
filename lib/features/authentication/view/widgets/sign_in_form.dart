@@ -38,9 +38,10 @@ class _SignInFormState extends State<SignInForm> {
           _alertService.showAlert(
               currentContext, "you have successfully login", AlertType.success);
           _navigationService.pushReplacement("/home");
+        } else {
+          _alertService.showAlert(
+              currentContext, "failed to login", AlertType.error);
         }
-        _alertService.showAlert(
-            currentContext, "failed to login", AlertType.error);
       }
     } catch (e) {
       if (currentContext.mounted) {
@@ -49,6 +50,7 @@ class _SignInFormState extends State<SignInForm> {
     }
   }
 
+  bool obscureText = true;
   @override
   Widget build(BuildContext context) {
     return SingleChildScrollView(
@@ -59,7 +61,38 @@ class _SignInFormState extends State<SignInForm> {
           child: Column(
             children: [
               TextFormField(
-                decoration: const InputDecoration(labelText: 'Email'),
+                decoration: InputDecoration(
+                  labelText: 'Email',
+                  labelStyle: TextStyle(
+                    color: Colors.grey[600], // Label color
+                    fontWeight: FontWeight.w400,
+                  ),
+                  hintText: 'Enter your email',
+                  hintStyle:
+                      TextStyle(color: Colors.grey[400]), // Hint text color
+                  prefixIcon: Icon(
+                    Icons.email,
+                    color: Color(0xFF229ED9), // Icon color to match underline
+                  ),
+                  enabledBorder: UnderlineInputBorder(
+                    borderSide: BorderSide(
+                      color: Color(0xFF229ED9),
+                      width: 1.5,
+                    ),
+                  ),
+                  focusedBorder: UnderlineInputBorder(
+                    borderSide: BorderSide(
+                      color: Color(0xFF229ED9),
+                      width: 2.0,
+                    ),
+                  ),
+                  border: UnderlineInputBorder(
+                    borderSide: BorderSide(
+                      color: Colors.grey[300]!,
+                      width: 1.5,
+                    ),
+                  ),
+                ),
                 keyboardType: TextInputType.emailAddress,
                 onChanged: (value) {
                   setState(() {
@@ -74,8 +107,43 @@ class _SignInFormState extends State<SignInForm> {
                 },
               ),
               TextFormField(
-                decoration: const InputDecoration(labelText: 'Password'),
-                obscureText: true,
+                decoration: InputDecoration(
+                  labelText: 'Password',
+                  labelStyle: TextStyle(
+                    color: Colors.grey[600], // Label color
+                    fontWeight: FontWeight.w400,
+                  ),
+                  hintText: 'Enter your password',
+                  hintStyle: TextStyle(color: Colors.grey[400]),
+                  prefixIcon: Icon(
+                    Icons.lock,
+                    color: Color(0xFF229ED9),
+                  ),
+                  suffixIcon: IconButton(
+                    icon: Icon(
+                      Icons.visibility_off, // Default icon
+                      color: Colors.grey[600],
+                    ),
+                    onPressed: () {
+                      setState(() {
+                        obscureText = !obscureText;
+                      });
+                    },
+                  ),
+                  enabledBorder: UnderlineInputBorder(
+                    borderSide: BorderSide(
+                      color: Color(0xFF229ED9),
+                      width: 1.5,
+                    ),
+                  ),
+                  focusedBorder: UnderlineInputBorder(
+                    borderSide: BorderSide(
+                      color: Color(0xFF229ED9),
+                      width: 2.0,
+                    ),
+                  ),
+                ),
+                obscureText: obscureText, // Toggles visibility
                 onChanged: (value) {
                   setState(() {
                     password = value;
@@ -95,8 +163,25 @@ class _SignInFormState extends State<SignInForm> {
                     _signIn();
                   }
                 },
-                child: const Text('Sign In'),
-              ),
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Color(0xFF229ED9), // Primary color
+                  padding: const EdgeInsets.symmetric(
+                      vertical: 14.0,
+                      horizontal: 24.0), // Adjust padding for a larger button
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(8.0), // Rounded corners
+                  ),
+                  elevation: 5, // Slight elevation for depth
+                ),
+                child: const Text(
+                  'Sign In',
+                  style: TextStyle(
+                    fontSize: 16.0,
+                    fontWeight: FontWeight.w600,
+                    color: Colors.white, // Text color
+                  ),
+                ),
+              )
             ],
           ),
         ),

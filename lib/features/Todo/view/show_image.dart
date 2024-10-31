@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:todo_app_with_chat/Service/DatabaseService/DatabaseService.dart';
+import 'package:todo_app_with_chat/Service/DatabaseService/database_service.dart';
 import 'package:todo_app_with_chat/core/models/photoModel.dart';
 import 'package:todo_app_with_chat/locator.dart';
 
@@ -32,7 +32,7 @@ class _ShowImageState extends State<ShowImage> {
                 print(result);
                 if (result) Navigator.pop(context);
               },
-              icon: Icon(
+              icon: const Icon(
                 Icons.delete,
                 color: Colors.deepOrange,
               ))

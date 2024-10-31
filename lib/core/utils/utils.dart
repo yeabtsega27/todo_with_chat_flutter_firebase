@@ -1,4 +1,6 @@
 import 'package:intl/intl.dart';
+import 'package:todo_app_with_chat/core/models/messageModel.dart';
+import 'package:todo_app_with_chat/core/models/photoModel.dart';
 
 String formatDate(String dateTimeString) {
   DateTime now = DateTime.now();
@@ -9,7 +11,7 @@ String formatDate(String dateTimeString) {
 
   if (dayDifference == 0) {
     // If it's today, show "today"
-    return "Today ${DateFormat('hh:mm a').format(dateTime)}";
+    return DateFormat('hh:mm a').format(dateTime);
   } else if (dayDifference == 1) {
     // If it's yesterday, show "yesterday"
     return "Yesterday ${DateFormat('hh:mm a').format(dateTime)}";
@@ -23,4 +25,21 @@ String formatDate(String dateTimeString) {
     // For dates in previous years, include year as well
     return "${DateFormat('MMM d, yyyy').format(dateTime)} ${DateFormat('hh:mm a').format(dateTime)}";
   }
+}
+
+String generatePersonChatId(String uid1, String uid2) {
+  List<String> userIds = [uid1, uid2];
+  userIds.sort();
+  return userIds.join("");
+}
+
+MessageModel emptyMessage(String uid) {
+  return MessageModel(
+      id: "",
+      senderEmail: uid,
+      type: "",
+      content: "",
+      mediaUrl: Photo.fromJson({}),
+      sendTime: DateTime.now().toString(),
+      readUsers: [uid]);
 }

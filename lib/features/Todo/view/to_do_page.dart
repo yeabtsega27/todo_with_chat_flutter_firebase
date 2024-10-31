@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
-import 'package:todo_app_with_chat/Service/DatabaseService/DatabaseService.dart';
+import 'package:todo_app_with_chat/Service/DatabaseService/database_service.dart';
 import 'package:todo_app_with_chat/Service/navigation_service.dart';
 import 'package:todo_app_with_chat/core/models/toDoModel.dart';
 import 'package:todo_app_with_chat/features/Todo/view//widgets/to_do_app_bar.dart';
@@ -41,10 +41,10 @@ class _ToDoPageState extends State<ToDoPage> {
             todoList.add(todo);
           }
         });
-        List<ToDoModel> combinedList = [...pinedTodoList, ...todoList];
 
         return Body(
-          todoList: combinedList,
+          todoList: todoList,
+          pinedTodoList: pinedTodoList,
         );
       },
       stream: _databaseService.getMyToDo(),
@@ -54,9 +54,11 @@ class _ToDoPageState extends State<ToDoPage> {
 
 class Body extends StatefulWidget {
   List<ToDoModel> todoList;
+  List<ToDoModel> pinedTodoList;
   Body({
     super.key,
     required this.todoList,
+    required this.pinedTodoList,
   });
 
   @override
@@ -64,7 +66,7 @@ class Body extends StatefulWidget {
 }
 
 class _BodyState extends State<Body> {
-  bool isGrid = true;
+  bool isGrid = false;
   late DatabaseService _databaseService;
   late NavigationService _navigationService;
   @override
@@ -76,53 +78,121 @@ class _BodyState extends State<Body> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: ToDoAppBar(onChange: (bool value) {
-        setState(() {
-          isGrid = value;
-        });
-      }),
-      body: Column(
-        children: [
-          (widget.todoList.isEmpty)
-              ? const Text("no todo found")
-              : Expanded(
-                  child: isGrid
-                      ? buildGridView(widget.todoList) // Show Grid View
-                      : buildListView(widget.todoList),
-                )
-        ],
-      ),
-      floatingActionButton: FloatingActionButton(
-        backgroundColor: Colors.blue,
-        onPressed: () async {
-          String id = await _databaseService.createToDo();
-          _navigationService.push(MaterialPageRoute(
-              builder: (context) => ToDoDetailPage(todoId: id)));
-        },
-        child: const Icon(
-          Icons.add,
-          color: Colors.white,
+    return Stack(
+      children: [
+        // Main content
+        Column(
+          children: [
+            // Custom App Bar
+            ToDoAppBar(
+              onChange: (bool value) {
+                setState(() {
+                  isGrid = value;
+                });
+              },
+            ),
+            // Body content
+            Expanded(
+              child: widget.todoList.isEmpty
+                  ? const Center(child: Text("No todo found"))
+                  : isGrid
+                      ? buildGridView(widget.todoList, widget.pinedTodoList)
+                      : buildListView(
+                          [...widget.pinedTodoList, ...widget.todoList]),
+            ),
+          ],
         ),
-      ),
+        // Floating Action Button
+        Positioned(
+          bottom: 0,
+          right: 0,
+          child: GestureDetector(
+            onTap: () async {
+              String id = await _databaseService.createToDo();
+              _navigationService.push(MaterialPageRoute(
+                  builder: (context) => ToDoDetailPage(todoId: id)));
+            },
+            child: Container(
+              margin: const EdgeInsets.all(
+                  16.0), // Optional: Add margin around the button
+              decoration: const BoxDecoration(
+                color: Color(0xFF229ED9),
+                shape: BoxShape.circle,
+              ),
+              child: const Padding(
+                padding: EdgeInsets.all(16.0), // Adjust padding for size
+                child: Icon(
+                  Icons.add,
+                  color: Colors.white,
+                  size: 30, // Size of the icon
+                ),
+              ),
+            ),
+          ),
+        ),
+      ],
     );
   }
 
-  Widget buildGridView(List<ToDoModel> todoList) {
+  Widget buildGridView(
+      List<ToDoModel> todoList, List<ToDoModel> pinedTodoList) {
     return MasonryGridView.count(
+      padding: EdgeInsets.zero,
       crossAxisCount: 2, // Number of columns in the grid
-      itemCount: todoList.length,
+      itemCount: todoList.length + pinedTodoList.length,
       itemBuilder: (context, index) {
-        return ToDoCard(todo: todoList[index]);
+        if (pinedTodoList.length > index) {
+          return ToDoCard(todo: pinedTodoList[index]);
+        } else {
+          return ToDoCard(todo: todoList[index - (pinedTodoList.length)]);
+        }
       },
     );
   }
 
   Widget buildListView(List<ToDoModel> todoList) {
     return ListView.builder(
-      padding: const EdgeInsets.all(10),
+      padding: EdgeInsets.zero,
       itemCount: todoList.length,
       itemBuilder: (context, index) {
+        if (todoList[index].pined && index == 0) {
+          return Column(
+            children: [
+              const Padding(
+                padding: EdgeInsets.all(16.0),
+                child: Row(
+                  children: [
+                    Expanded(child: Text("pined")),
+                  ],
+                ),
+              ),
+              Row(
+                children: [
+                  Expanded(child: ToDoCard(todo: todoList[index])),
+                ],
+              )
+            ],
+          );
+        }
+        if (index > 0 && !todoList[index].pined && todoList[index - 1].pined) {
+          return Column(
+            children: [
+              const Padding(
+                padding: EdgeInsets.all(16.0),
+                child: Row(
+                  children: [
+                    Expanded(child: Text("others")),
+                  ],
+                ),
+              ),
+              Row(
+                children: [
+                  Expanded(child: ToDoCard(todo: todoList[index])),
+                ],
+              )
+            ],
+          );
+        }
         return ToDoCard(todo: todoList[index]);
       },
     );

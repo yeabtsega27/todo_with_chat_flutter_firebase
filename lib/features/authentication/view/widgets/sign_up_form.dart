@@ -21,6 +21,8 @@ class _SignUpFormState extends State<SignUpForm> {
   late AuthService _authService;
   late NavigationService _navigationService;
   late AlertService _alertService;
+
+  bool obscureText = true;
   @override
   void initState() {
     super.initState();
@@ -41,7 +43,7 @@ class _SignUpFormState extends State<SignUpForm> {
           _navigationService.pushReplacement("/home");
         } else {
           _alertService.showAlert(
-              currentContext, "you have successfully login", AlertType.error);
+              currentContext, "Failed to create account", AlertType.error);
         }
       }
     } catch (e) {
@@ -61,7 +63,31 @@ class _SignUpFormState extends State<SignUpForm> {
           child: Column(
             children: [
               TextFormField(
-                decoration: const InputDecoration(labelText: 'Name'),
+                decoration: InputDecoration(
+                  labelText: 'Name',
+                  labelStyle: TextStyle(
+                    color: Colors.grey[600],
+                    fontWeight: FontWeight.w400,
+                  ),
+                  hintText: 'Enter your name',
+                  hintStyle: TextStyle(color: Colors.grey[400]),
+                  prefixIcon: const Icon(
+                    Icons.person,
+                    color: Color(0xFF229ED9),
+                  ),
+                  enabledBorder: const UnderlineInputBorder(
+                    borderSide: BorderSide(
+                      color: Color(0xFF229ED9),
+                      width: 1.5,
+                    ),
+                  ),
+                  focusedBorder: const UnderlineInputBorder(
+                    borderSide: BorderSide(
+                      color: Color(0xFF229ED9),
+                      width: 2.0,
+                    ),
+                  ),
+                ),
                 keyboardType: TextInputType.name,
                 controller: nameController,
                 validator: (value) {
@@ -72,7 +98,31 @@ class _SignUpFormState extends State<SignUpForm> {
                 },
               ),
               TextFormField(
-                decoration: const InputDecoration(labelText: 'Email'),
+                decoration: InputDecoration(
+                  labelText: 'Email',
+                  labelStyle: TextStyle(
+                    color: Colors.grey[600],
+                    fontWeight: FontWeight.w400,
+                  ),
+                  hintText: 'Enter your email',
+                  hintStyle: TextStyle(color: Colors.grey[400]),
+                  prefixIcon: const Icon(
+                    Icons.email,
+                    color: Color(0xFF229ED9),
+                  ),
+                  enabledBorder: const UnderlineInputBorder(
+                    borderSide: BorderSide(
+                      color: Color(0xFF229ED9),
+                      width: 1.5,
+                    ),
+                  ),
+                  focusedBorder: const UnderlineInputBorder(
+                    borderSide: BorderSide(
+                      color: Color(0xFF229ED9),
+                      width: 2.0,
+                    ),
+                  ),
+                ),
                 keyboardType: TextInputType.emailAddress,
                 controller: emailController,
                 validator: (value) {
@@ -83,46 +133,127 @@ class _SignUpFormState extends State<SignUpForm> {
                 },
               ),
               TextFormField(
-                decoration: const InputDecoration(labelText: 'Password'),
-                obscureText: true,
+                decoration: InputDecoration(
+                  labelText: 'Password',
+                  labelStyle: TextStyle(
+                    color: Colors.grey[600],
+                    fontWeight: FontWeight.w400,
+                  ),
+                  hintText: 'Enter your password',
+                  hintStyle: TextStyle(color: Colors.grey[400]),
+                  prefixIcon: const Icon(
+                    Icons.lock,
+                    color: Color(0xFF229ED9),
+                  ),
+                  suffixIcon: IconButton(
+                    icon: Icon(
+                      obscureText ? Icons.visibility_off : Icons.visibility,
+                      color: Colors.grey[600],
+                    ),
+                    onPressed: () {
+                      setState(() {
+                        obscureText = !obscureText;
+                      });
+                    },
+                  ),
+                  enabledBorder: const UnderlineInputBorder(
+                    borderSide: BorderSide(
+                      color: Color(0xFF229ED9),
+                      width: 1.5,
+                    ),
+                  ),
+                  focusedBorder: const UnderlineInputBorder(
+                    borderSide: BorderSide(
+                      color: Color(0xFF229ED9),
+                      width: 2.0,
+                    ),
+                  ),
+                ),
+                obscureText: obscureText,
                 controller: passwordController,
                 validator: (value) {
                   if (value == null || value.isEmpty) {
                     return 'Please enter your password';
                   }
                   if (value.length < 6) {
-                    return 'Password must be grater than 6 char';
+                    return 'Password must be greater than 6 characters';
                   }
                   return null;
                 },
               ),
               TextFormField(
-                decoration:
-                    const InputDecoration(labelText: 'Confirm Password'),
-                obscureText: true,
+                decoration: InputDecoration(
+                  labelText: 'Confirm Password',
+                  labelStyle: TextStyle(
+                    color: Colors.grey[600],
+                    fontWeight: FontWeight.w400,
+                  ),
+                  hintText: 'Re-enter your password',
+                  hintStyle: TextStyle(color: Colors.grey[400]),
+                  prefixIcon: const Icon(
+                    Icons.lock,
+                    color: Color(0xFF229ED9),
+                  ),
+                  suffixIcon: IconButton(
+                    icon: Icon(
+                      obscureText ? Icons.visibility_off : Icons.visibility,
+                      color: Colors.grey[600],
+                    ),
+                    onPressed: () {
+                      setState(() {
+                        obscureText = !obscureText;
+                      });
+                    },
+                  ),
+                  enabledBorder: const UnderlineInputBorder(
+                    borderSide: BorderSide(
+                      color: Color(0xFF229ED9),
+                      width: 1.5,
+                    ),
+                  ),
+                  focusedBorder: const UnderlineInputBorder(
+                    borderSide: BorderSide(
+                      color: Color(0xFF229ED9),
+                      width: 2.0,
+                    ),
+                  ),
+                ),
+                obscureText: obscureText,
                 controller: confirmPasswordController,
                 validator: (value) {
                   if (value == null || value.isEmpty) {
                     return 'Confirm your password';
                   }
-                  if (value.length < 6) {
-                    return 'Password must be grater than 6 char';
-                  }
-                  if (!(value == passwordController.text)) {
-                    return 'Password dose not match';
+                  if (value != passwordController.text) {
+                    return 'Passwords do not match';
                   }
                   return null;
                 },
               ),
-              const SizedBox(height: 20),
               ElevatedButton(
                 onPressed: () {
                   if (_formKey.currentState!.validate()) {
                     _signUp();
                   }
                 },
-                child: const Text('Sign Up'),
-              ),
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: const Color(0xFF229ED9),
+                  padding: const EdgeInsets.symmetric(
+                      vertical: 14.0, horizontal: 24.0),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(8.0),
+                  ),
+                  elevation: 5,
+                ),
+                child: const Text(
+                  'Sign Up',
+                  style: TextStyle(
+                    fontSize: 16.0,
+                    fontWeight: FontWeight.w600,
+                    color: Colors.white,
+                  ),
+                ),
+              )
             ],
           ),
         ),

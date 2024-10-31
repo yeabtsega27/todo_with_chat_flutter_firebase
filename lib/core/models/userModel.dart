@@ -1,10 +1,12 @@
+import 'package:todo_app_with_chat/core/models/photoModel.dart';
+
 class UserModel {
   String userId;
   String username;
   String email;
   bool online;
   String lastSeen;
-  List<ProfilePhoto> photos;
+  List<Photo> photos;
 
   UserModel({
     required this.userId,
@@ -30,41 +32,12 @@ class UserModel {
   // Create UserModel from JSON (for retrieving from Firebase Realtime Database)
   factory UserModel.fromJson(Map<String, dynamic>? json) {
     return UserModel(
-      userId: json?['userId'],
-      username: json?['username'],
-      email: json?['email'],
-      photos: (json?['photos'] as List)
-          .map((e) => ProfilePhoto.fromJson(e))
-          .toList(),
-      online: json?['online'],
-      lastSeen: json?['lastSeen'],
-    );
-  }
-}
-
-// Define the Photo class to store photoURL and uploadTime
-class ProfilePhoto {
-  String photoURL;
-  DateTime uploadTime;
-
-  ProfilePhoto({
-    required this.photoURL,
-    required this.uploadTime,
-  });
-
-  // Convert Photo to JSON
-  Map<String, dynamic> toJson() {
-    return {
-      'photoURL': photoURL,
-      'uploadTime': uploadTime.toIso8601String(),
-    };
-  }
-
-  // Create Photo from JSON
-  factory ProfilePhoto.fromJson(Map<String, dynamic>? json) {
-    return ProfilePhoto(
-      photoURL: json?['photoURL'],
-      uploadTime: DateTime.parse(json?['uploadTime']),
+      userId: json?['userId'] ?? "",
+      username: json?['username'] ?? "",
+      email: json?['email'] ?? "",
+      photos: (json?['photos'] as List).map((e) => Photo.fromJson(e)).toList(),
+      online: json?['online'] ?? "",
+      lastSeen: json?['lastSeen'] ?? "",
     );
   }
 }

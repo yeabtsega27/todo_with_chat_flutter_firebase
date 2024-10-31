@@ -10,19 +10,60 @@ class AuthScreen extends StatelessWidget {
     return DefaultTabController(
       length: 2, // Two tabs: Sign In and Sign Up
       child: Scaffold(
+        backgroundColor: const Color(0xFFFAFAFA),
         appBar: AppBar(
-          title: const Text('Sign In / Sign Up'),
-          bottom: const TabBar(
-            tabs: [
-              Tab(text: 'Sign In'),
-              Tab(text: 'Sign Up'),
-            ],
-          ),
+          backgroundColor: const Color(0xFFFAFAFA),
         ),
-        body: TabBarView(
+        body: const Column(
           children: [
-            SignInForm(), // Sign In form
-            const SignUpForm(), // Sign Up form
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Icon(
+                  Icons.task_alt_rounded,
+                  size: 100,
+                  color: Color(0xFF229ED9),
+                )
+              ],
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text(
+                  "ToDo Chat",
+                  style: TextStyle(
+                      fontWeight: FontWeight.w700,
+                      fontSize: 30,
+                      color: Color(0xFF229ED9)),
+                )
+              ],
+            ),
+            Expanded(
+                child: Padding(
+              padding: EdgeInsets.symmetric(horizontal: 28.0),
+              child: Column(
+                children: [
+                  TabBar(
+                    indicatorColor: Color(0xFF229ED9),
+                    dividerColor: Colors.transparent,
+                    labelColor: Colors.black,
+                    unselectedLabelColor: Colors.black87,
+                    tabs: [
+                      Tab(text: 'Sign In'),
+                      Tab(text: 'Sign Up'),
+                    ],
+                  ),
+                  Expanded(
+                    child: TabBarView(
+                      children: [
+                        SignInForm(), // Sign In form
+                        SignUpForm(), // Sign Up form
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+            )),
           ],
         ),
       ),

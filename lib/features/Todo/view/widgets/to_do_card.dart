@@ -6,9 +6,9 @@ class ToDoCard extends StatelessWidget {
   final ToDoModel todo;
 
   const ToDoCard({
-    Key? key,
+    super.key,
     required this.todo,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -30,7 +30,7 @@ class ToDoCard extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               // Fixed size image placeholder
-              todo.photos.length == 0
+              todo.photos.isEmpty
                   ? const SizedBox(height: 0)
                   : todo.photos.length == 1
                       ? Container(

@@ -14,10 +14,17 @@ class SplashScreen extends StatefulWidget {
 }
 
 class _SplashScreenState extends State<SplashScreen> {
+  late NavigationService _navigationService;
+  @override
+  void initState() {
+    _navigationService = locator.get<NavigationService>();
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        backgroundColor: Colors.blue, // Set your desired background color
+        backgroundColor: Color(0xFF229ED9), // Set your desired background color
         body: StreamBuilder(
             stream: locator.get<AuthService>().isUserLogin(),
             builder: (context, snapshot) {
@@ -26,9 +33,9 @@ class _SplashScreenState extends State<SplashScreen> {
                   User? user = snapshot.data;
                   if (user == null) {
                     // User is not signed in, show the Authentication page
-                    locator.get<NavigationService>().pushReplacement("/auth");
+                    _navigationService.pushReplacement("/auth");
                   } else {
-                    locator.get<NavigationService>().pushReplacement("/home");
+                    _navigationService.pushReplacement("/home");
                   }
                 }
               });

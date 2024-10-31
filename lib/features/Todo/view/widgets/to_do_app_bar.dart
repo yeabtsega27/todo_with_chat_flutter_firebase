@@ -18,19 +18,25 @@ class _ToDoAppBarState extends State<ToDoAppBar> {
 
   @override
   Widget build(BuildContext context) {
-    return AppBar(title: const Text('ToDo'), actions: [
-      IconButton(
-        icon: Icon(
-          isGrid ? Icons.list : Icons.grid_view,
-          color: Colors.black,
+    return AppBar(
+        backgroundColor: const Color(0xFF229ED9),
+        title: const Text(
+          'ToDo',
+          style: TextStyle(color: Colors.white),
         ),
-        onPressed: () {
-          setState(() {
-            isGrid = !isGrid;
-            widget.onChange(isGrid);
-          });
-        },
-      )
-    ]);
+        actions: [
+          IconButton(
+            icon: Icon(
+              isGrid ? Icons.list : Icons.grid_view,
+              color: Colors.white,
+            ),
+            onPressed: () {
+              setState(() {
+                isGrid = !isGrid;
+                widget.onChange(isGrid);
+              });
+            },
+          )
+        ]);
   }
 }

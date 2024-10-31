@@ -1,5 +1,5 @@
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:todo_app_with_chat/Service/DatabaseService/DatabaseService.dart';
+import 'package:todo_app_with_chat/Service/DatabaseService/database_service.dart';
 import 'package:todo_app_with_chat/core/models/userModel.dart';
 import 'package:todo_app_with_chat/locator.dart';
 
@@ -47,7 +47,7 @@ class AuthService {
           email: email, password: password);
       if (credential.user != null) {
         _user = credential.user;
-        _databaseService.updateUserStatus(credential.user!.uid, true, "now");
+        _databaseService.updatedUserStates(true);
         return true;
       }
     } catch (e) {
@@ -58,7 +58,9 @@ class AuthService {
 
   Future<bool> logOut() async {
     try {
+      await _databaseService.updatedUserStates(false);
       await _authInstance.signOut();
+
       return true;
     } catch (e) {
       print(e);
