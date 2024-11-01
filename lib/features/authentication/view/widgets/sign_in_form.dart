@@ -15,6 +15,7 @@ class _SignInFormState extends State<SignInForm> {
   final _formKey = GlobalKey<FormState>();
   String email = '';
   String password = '';
+  bool isLoading = false;
 
   late AuthService _authService;
   late AlertService _alertService;
@@ -48,6 +49,10 @@ class _SignInFormState extends State<SignInForm> {
         _alertService.showAlert(currentContext, "Error:$e", AlertType.error);
       }
     }
+
+    setState(() {
+      isLoading = false;
+    });
   }
 
   bool obscureText = true;
@@ -160,6 +165,9 @@ class _SignInFormState extends State<SignInForm> {
               ElevatedButton(
                 onPressed: () {
                   if (_formKey.currentState!.validate()) {
+                    setState(() {
+                      isLoading = true;
+                    });
                     _signIn();
                   }
                 },
@@ -173,13 +181,24 @@ class _SignInFormState extends State<SignInForm> {
                   ),
                   elevation: 5, // Slight elevation for depth
                 ),
-                child: const Text(
-                  'Sign In',
-                  style: TextStyle(
-                    fontSize: 16.0,
-                    fontWeight: FontWeight.w600,
-                    color: Colors.white, // Text color
-                  ),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    const Text(
+                      'Sign In',
+                      style: TextStyle(
+                        fontSize: 16.0,
+                        fontWeight: FontWeight.w600,
+                        color: Colors.white, // Text color
+                      ),
+                    ),
+                    if (isLoading)
+                      const CircularProgressIndicator(
+                        color: Colors.white,
+                        strokeWidth: 4,
+                        // value: 0.8,
+                      )
+                  ],
                 ),
               )
             ],

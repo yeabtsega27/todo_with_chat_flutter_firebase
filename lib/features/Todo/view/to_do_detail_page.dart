@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:todo_app_with_chat/Service/DatabaseService/database_service.dart';
 import 'package:todo_app_with_chat/core/models/toDoModel.dart';
+import 'package:todo_app_with_chat/core/widgets/network_image_with_fallback.dart';
 import 'package:todo_app_with_chat/features/Todo/view//show_image.dart';
 import 'package:todo_app_with_chat/features/Todo/view//widgets/bottom_action.dart';
 import 'package:todo_app_with_chat/features/Todo/view//widgets/note_input.dart';
@@ -92,9 +93,10 @@ class _ToDoDetailPageState extends State<ToDoDetailPage> {
                                   },
                                   child: Padding(
                                     padding: const EdgeInsets.all(1.0),
-                                    child: Image.network(
-                                      toDo.photos[i].photoURL,
-                                      fit: BoxFit.cover,
+                                    child: NetworkImageWithFallback(
+                                      imageUrl: toDo.photos[i].photoURL,
+                                      fallbackAssetPath:
+                                          'assets/default_image.jpg',
                                     ),
                                   ),
                                 ));

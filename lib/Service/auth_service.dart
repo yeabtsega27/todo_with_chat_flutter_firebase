@@ -67,4 +67,26 @@ class AuthService {
     }
     return false;
   }
+
+  Future<bool> changeEmail(email) async {
+    try {
+      print(email);
+      _authInstance.currentUser?.updateEmail(email);
+      _databaseService.uploadEmail(email);
+      return true;
+    } catch (e) {
+      print(e);
+    }
+    return false;
+  }
+
+  Future<bool> changePassword(String password) async {
+    try {
+      _authInstance.currentUser?.updatePassword(password);
+      return true;
+    } catch (e) {
+      print(e);
+    }
+    return false;
+  }
 }

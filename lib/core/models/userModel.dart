@@ -36,7 +36,7 @@ class UserModel {
       username: json?['username'] ?? "",
       email: json?['email'] ?? "",
       photos: (json?['photos'] as List).map((e) => Photo.fromJson(e)).toList(),
-      online: json?['online'] ?? "",
+      online: json?['online'] ?? false,
       lastSeen: json?['lastSeen'] ?? "",
     );
   }

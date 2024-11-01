@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:todo_app_with_chat/Service/DatabaseService/database_service.dart';
 import 'package:todo_app_with_chat/core/models/photoModel.dart';
+import 'package:todo_app_with_chat/core/widgets/network_image_with_fallback.dart';
 import 'package:todo_app_with_chat/locator.dart';
 
 class ShowImage extends StatefulWidget {
@@ -39,9 +40,9 @@ class _ShowImageState extends State<ShowImage> {
         ],
       ),
       body: Center(
-        child: Image.network(
-          widget.photo.photoURL,
-          fit: BoxFit.fitHeight,
+        child: NetworkImageWithFallback(
+          imageUrl: widget.photo.photoURL,
+          fallbackAssetPath: 'assets/default_image.jpg',
         ),
       ),
     );

@@ -4,6 +4,7 @@ import 'package:flutter_chat_bubble/chat_bubble.dart';
 import 'package:todo_app_with_chat/Service/DatabaseService/database_service.dart';
 import 'package:todo_app_with_chat/core/models/messageModel.dart';
 import 'package:todo_app_with_chat/core/utils/utils.dart';
+import 'package:todo_app_with_chat/core/widgets/network_image_with_fallback.dart';
 import 'package:todo_app_with_chat/locator.dart';
 
 class MessageBubble extends StatefulWidget {
@@ -96,27 +97,10 @@ class _MessageBubbleState extends State<MessageBubble> {
               borderRadius: BorderRadius.circular(10),
             ),
             child: ClipRRect(
-              borderRadius: BorderRadius.circular(10), // Rounded corners
-              child: Image.network(
-                widget.message.mediaUrl.photoURL,
-                fit: BoxFit.cover,
-                loadingBuilder: (BuildContext context, Widget child,
-                    ImageChunkEvent? loadingProgress) {
-                  if (loadingProgress == null) return child;
-                  return Center(
-                    child: CircularProgressIndicator(
-                      value: loadingProgress.expectedTotalBytes != null
-                          ? loadingProgress.cumulativeBytesLoaded /
-                              (loadingProgress.expectedTotalBytes ?? 1)
-                          : null,
-                    ),
-                  );
-                },
-                errorBuilder: (context, error, stackTrace) {
-                  return const Center(
-                    child: Text('Image not available'),
-                  );
-                },
+              borderRadius: BorderRadius.circular(10),
+              child: NetworkImageWithFallback(
+                imageUrl: widget.message.mediaUrl.photoURL,
+                fallbackAssetPath: 'assets/default_image.jpg',
               ),
             ),
           )

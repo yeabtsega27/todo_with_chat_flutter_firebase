@@ -377,6 +377,11 @@ class DatabaseService {
     });
   }
 
+  Stream<UserModel> getMyInfo() {
+    String Uid = FirebaseAuth.instance.currentUser?.uid ?? "";
+    return getUserById(Uid);
+  }
+
   Stream<ChatModel> getChatById(String chatId) {
     return _chatsCollection!.doc(chatId).snapshots().map<ChatModel>((e) {
       return e.data() as ChatModel;
@@ -434,6 +439,31 @@ class DatabaseService {
         readUsers: [uid]);
     await getMessagesCollection(chatId).doc(key).set(newMessage);
     await updateLatestMessage(chatId, newMessage);
+  }
+
+  uploadProfile(File imageFile) async {
+    var imageData = await uploadImageToFirebase("messages", imageFile);
+    Photo photo = Photo(
+        photoURL: imageData["downloadUrl"],
+        uploadTime: DateTime.now(),
+        path: (imageData["imageMetadata"] as FullMetadata).fullPath);
+    var uid = FirebaseAuth.instance.currentUser?.uid ?? "";
+
+    await _usersCollection!.doc(uid).update({
+      "photos": FieldValue.arrayUnion([photo.toJson()])
+    });
+  }
+
+  uploadName(String name) async {
+    var uid = FirebaseAuth.instance.currentUser?.uid ?? "";
+
+    await _usersCollection!.doc(uid).update({"username": name});
+  }
+
+  uploadEmail(String name) async {
+    var uid = FirebaseAuth.instance.currentUser?.uid ?? "";
+
+    await _usersCollection!.doc(uid).update({"email": name});
   }
 
   updateLatestMessage(String chatId, MessageModel message) async {

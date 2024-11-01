@@ -14,7 +14,7 @@ class ToDoAppBar extends StatefulWidget implements PreferredSizeWidget {
 }
 
 class _ToDoAppBarState extends State<ToDoAppBar> {
-  bool isGrid = true;
+  bool isGrid = false;
 
   @override
   Widget build(BuildContext context) {

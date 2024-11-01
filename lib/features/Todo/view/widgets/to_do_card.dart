@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:todo_app_with_chat/core/models/toDoModel.dart';
+import 'package:todo_app_with_chat/core/widgets/network_image_with_fallback.dart';
 import 'package:todo_app_with_chat/features/Todo/view//to_do_detail_page.dart';
 
 class ToDoCard extends StatelessWidget {
@@ -39,9 +40,9 @@ class ToDoCard extends StatelessWidget {
                             color: Colors.grey[300],
                             borderRadius: BorderRadius.circular(10),
                           ),
-                          child: Image.network(
-                            todo.photos[0].photoURL,
-                            fit: BoxFit.fitWidth,
+                          child: NetworkImageWithFallback(
+                            imageUrl: todo.photos[0].photoURL,
+                            fallbackAssetPath: 'assets/default_image.jpg',
                           ),
                         )
                       : Container(
@@ -61,9 +62,10 @@ class ToDoCard extends StatelessWidget {
                                     color: Colors.grey[300],
                                     borderRadius: BorderRadius.circular(10),
                                   ),
-                                  child: Image.network(
-                                    todo.photos[index].photoURL,
-                                    fit: BoxFit.cover,
+                                  child: NetworkImageWithFallback(
+                                    imageUrl: todo.photos[0].photoURL,
+                                    fallbackAssetPath:
+                                        'assets/default_image.jpg',
                                   ),
                                 );
                               }),

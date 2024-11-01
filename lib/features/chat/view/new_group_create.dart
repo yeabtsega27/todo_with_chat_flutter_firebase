@@ -23,6 +23,7 @@ class _NewGroupCreateState extends State<NewGroupCreate> {
   late AlertService _alertService;
   late DatabaseService _databaseService;
   late NavigationService _navigationService;
+  bool isLoading = false;
   @override
   void initState() {
     _alertService = locator.get<AlertService>();
@@ -64,6 +65,9 @@ class _NewGroupCreateState extends State<NewGroupCreate> {
     }
     String key = await _databaseService.createNewGroupChat(
         photo, _groupNameController.text);
+    setState(() {
+      isLoading = false;
+    });
 
     _navigationService.pushReplacementRoute(
         MaterialPageRoute(builder: (context) => GroupChatPage(chatId: key)));
@@ -137,9 +141,22 @@ class _NewGroupCreateState extends State<NewGroupCreate> {
         ),
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: _onDone,
+        onPressed: () {
+          setState(() {
+            isLoading = true;
+          });
+          if (!isLoading) {
+            _onDone();
+          }
+        },
         backgroundColor: const Color(0xFF229ED9),
-        child: const Icon(Icons.done, color: Colors.white),
+        child: isLoading
+            ? const CircularProgressIndicator(
+                color: Colors.white,
+                strokeWidth: 4,
+                // value: 0.8,
+              )
+            : const Icon(Icons.done, color: Colors.white),
       ),
     );
   }

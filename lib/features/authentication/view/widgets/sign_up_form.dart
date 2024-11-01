@@ -21,6 +21,7 @@ class _SignUpFormState extends State<SignUpForm> {
   late AuthService _authService;
   late NavigationService _navigationService;
   late AlertService _alertService;
+  bool isLoading = false;
 
   bool obscureText = true;
   @override
@@ -51,6 +52,9 @@ class _SignUpFormState extends State<SignUpForm> {
         _alertService.showAlert(currentContext, "Error :$e", AlertType.error);
       }
     }
+    setState(() {
+      isLoading = false;
+    });
   }
 
   @override
@@ -230,9 +234,13 @@ class _SignUpFormState extends State<SignUpForm> {
                   return null;
                 },
               ),
+              const SizedBox(height: 20),
               ElevatedButton(
                 onPressed: () {
-                  if (_formKey.currentState!.validate()) {
+                  if (_formKey.currentState!.validate() && !isLoading) {
+                    setState(() {
+                      isLoading = true;
+                    });
                     _signUp();
                   }
                 },
@@ -245,13 +253,24 @@ class _SignUpFormState extends State<SignUpForm> {
                   ),
                   elevation: 5,
                 ),
-                child: const Text(
-                  'Sign Up',
-                  style: TextStyle(
-                    fontSize: 16.0,
-                    fontWeight: FontWeight.w600,
-                    color: Colors.white,
-                  ),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    const Text(
+                      'Sign Up',
+                      style: TextStyle(
+                        fontSize: 16.0,
+                        fontWeight: FontWeight.w600,
+                        color: Colors.white,
+                      ),
+                    ),
+                    if (isLoading)
+                      const CircularProgressIndicator(
+                        color: Colors.white,
+                        strokeWidth: 4,
+                        // value: 0.8,
+                      )
+                  ],
                 ),
               )
             ],

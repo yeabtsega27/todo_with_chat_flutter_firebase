@@ -33,7 +33,6 @@ class _ToDoPageState extends State<ToDoPage> {
 
         List<ToDoModel>? todoList = [];
         List<ToDoModel>? pinedTodoList = [];
-        print("todo");
         snapshot.data?.forEach((todo) {
           if (todo.pined) {
             pinedTodoList.add(todo);

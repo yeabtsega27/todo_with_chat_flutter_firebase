@@ -111,7 +111,7 @@ class _BottomActionState extends State<BottomAction> {
               ),
               ListTile(
                 leading: const Icon(Icons.photo_camera_outlined),
-                title: const Text('Tack photo'),
+                title: const Text('Take photo'),
                 onTap: () {
                   Navigator.pop(context);
                   pickImage(ImageSource.camera);
